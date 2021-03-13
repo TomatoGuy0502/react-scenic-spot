@@ -3,6 +3,9 @@ import { getScenicSpot } from '../api/scenicSpot'
 import ScenicListItem from './ScenicListItem'
 import LoadingStatus from './LoadingStatus'
 
+const NUM_OF_FIRST_LOAD = 10
+const NUM_OF_SCROLL_LOAD = 10
+
 class ScenicSpot extends Component {
   constructor(props) {
     super(props)
@@ -19,8 +22,7 @@ class ScenicSpot extends Component {
     if (offsetHeight + scrollTop >= scrollHeight && !this.state.isFetching) {
       this.setState({ isFetching: true })
       try {
-        const scenicSpots = await getScenicSpot(this.state.spots.length, 10)
-        this.setState({ spots: [...this.state.spots, ...scenicSpots] })
+        await this.fetchMoreData()
       } catch (error) {
         console.error(error)
       }
@@ -28,9 +30,37 @@ class ScenicSpot extends Component {
     }
   }
 
-  async componentDidMount() {
-    const scenicSpots = await getScenicSpot(0, 10)
+  // 首次抓取資料時，先設定特定城市or全部
+  fetchFirstData = async () => {
+    if (this.props.match.params.city) {
+      this.getData = function (skip, numOfScenicSpot) {
+        return getScenicSpot(skip, numOfScenicSpot, this.props.match.params.city)
+      }
+    } else {
+      this.getData = getScenicSpot
+    }
+    const scenicSpots = await this.getData(0, NUM_OF_FIRST_LOAD)
     this.setState({ spots: scenicSpots })
+  }
+
+  // 取得更多資料
+  fetchMoreData = async () => {
+    const scenicSpots = await this.getData(this.state.spots.length, NUM_OF_SCROLL_LOAD)
+    this.setState({ spots: [...this.state.spots, ...scenicSpots] })
+  }
+
+  async componentDidMount() {
+    this.fetchFirstData()
+  }
+
+  // 檢查是否換了不同的地區
+  async componentDidUpdate(prevProps) {
+    const oldCity = prevProps.match.params.city
+    const newCity = this.props.match.params.city
+
+    if (oldCity !== newCity) {
+      this.fetchFirstData()
+    }
   }
 
   render() {
@@ -40,10 +70,7 @@ class ScenicSpot extends Component {
 
     return (
       <div className="scenicSpot">
-        <ul
-          onScroll={this.checkScrollPosition}
-          style={{ height: '90vh', overflow: 'auto' }}
-        >
+        <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
           {ScenicList}
           <LoadingStatus />
         </ul>
