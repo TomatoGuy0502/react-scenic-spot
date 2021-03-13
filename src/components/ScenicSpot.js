@@ -13,11 +13,14 @@ class ScenicSpot extends Component {
     this.state = {
       spots: [],
       isFetching: false,
+      hasMoreDataToFetch: true,
     }
   }
 
   // 滑動時檢查是否到達最底，是則載入新資料
   checkScrollPosition = async (e) => {
+    if (!this.state.hasMoreDataToFetch) return // 若已經沒有新資料可抓取，則不需檢查了
+
     const { offsetHeight, scrollTop, scrollHeight } = e.target
     if (offsetHeight + scrollTop >= scrollHeight && !this.state.isFetching) {
       this.setState({ isFetching: true })
@@ -41,12 +44,22 @@ class ScenicSpot extends Component {
     }
     const scenicSpots = await this.getData(0, NUM_OF_FIRST_LOAD)
     this.setState({ spots: scenicSpots })
+    if (scenicSpots.length < NUM_OF_FIRST_LOAD) {
+      this.setState({ hasMoreDataToFetch: false })
+    }
   }
 
   // 取得更多資料
   fetchMoreData = async () => {
     const scenicSpots = await this.getData(this.state.spots.length, NUM_OF_SCROLL_LOAD)
-    this.setState({ spots: [...this.state.spots, ...scenicSpots] })
+    if (scenicSpots.length) {
+      this.setState({ spots: [...this.state.spots, ...scenicSpots] })
+      if (scenicSpots.length < NUM_OF_SCROLL_LOAD) {
+        this.setState({ hasMoreDataToFetch: false })
+      }
+    } else {
+      this.setState({ hasMoreDataToFetch: false })
+    }
   }
 
   async componentDidMount() {
@@ -60,6 +73,7 @@ class ScenicSpot extends Component {
 
     if (oldCity !== newCity) {
       this.fetchFirstData()
+      this.setState({ hasMoreDataToFetch: true })
     }
   }
 
