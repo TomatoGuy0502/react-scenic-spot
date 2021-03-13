@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ScenicListItem({ spot }) {
+function ScenicSpotListItem({ spot }) {
   return (
     <li key={spot.ID}>
       <h3>{spot.Name}</h3>
@@ -9,4 +9,4 @@ function ScenicListItem({ spot }) {
   )
 }
 
-export default ScenicListItem
+export default ScenicSpotListItem

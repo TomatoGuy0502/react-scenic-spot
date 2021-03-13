@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { getScenicSpot } from '../api/scenicSpot'
-import ScenicListItem from './ScenicListItem'
+import ScenicSpotListItem from './ScenicSpotListItem'
 import LoadingStatus from './LoadingStatus'
 
 const NUM_OF_FIRST_LOAD = 10
@@ -64,14 +64,14 @@ class ScenicSpot extends Component {
   }
 
   render() {
-    const ScenicList = this.state.spots.map((spot) => {
-      return <ScenicListItem key={spot.ID} spot={spot} />
+    const ScenicSpotList = this.state.spots.map((spot) => {
+      return <ScenicSpotListItem key={spot.ID} spot={spot} />
     })
 
     return (
       <div className="scenicSpot">
         <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
-          {ScenicList}
+          {ScenicSpotList}
           <LoadingStatus />
         </ul>
       </div>
