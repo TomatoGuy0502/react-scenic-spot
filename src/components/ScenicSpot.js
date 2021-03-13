@@ -82,11 +82,13 @@ class ScenicSpot extends Component {
       return <ScenicSpotListItem key={spot.ID} spot={spot} />
     })
 
+    const isLoading = this.state.isFetching || this.state.spots.length === 0
+
     return (
       <div className="scenicSpot">
         <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
           {ScenicSpotList}
-          <LoadingStatus />
+          {this.state.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
         </ul>
       </div>
     )
