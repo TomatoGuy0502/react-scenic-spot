@@ -2,9 +2,35 @@ import React, { Component } from 'react'
 import { getScenicSpot } from '../api/scenicSpot'
 import ScenicSpotListItem from './ScenicSpotListItem'
 import LoadingStatus from './LoadingStatus'
+import NotFound from './NotFound'
 
 const NUM_OF_FIRST_LOAD = 10
 const NUM_OF_SCROLL_LOAD = 10
+const cityList = [
+  undefined,
+  'Taipei',
+  'NewTaipei',
+  'Taoyuan',
+  'Taichung',
+  'Tainan',
+  'Kaohsiung',
+  'Keelung',
+  'Hsinchu',
+  'HsinchuCounty',
+  'MiaoliCounty',
+  'ChanghuaCounty',
+  'NantouCounty',
+  'YunlinCounty',
+  'ChiayiCounty',
+  'Chiayi',
+  'PingtungCounty',
+  'YilanCounty',
+  'HualienCounty',
+  'TaitungCounty',
+  'KinmenCounty',
+  'PenghuCounty',
+  'LienchiangCounty',
+]
 
 class ScenicSpot extends Component {
   constructor(props) {
@@ -78,20 +104,25 @@ class ScenicSpot extends Component {
   }
 
   render() {
-    const ScenicSpotList = this.state.spots.map((spot) => {
-      return <ScenicSpotListItem key={spot.ID} spot={spot} />
-    })
+    // 確認城市名稱是正確的
+    if (cityList.includes(this.props.match.params.city)) {
+      const ScenicSpotList = this.state.spots.map((spot) => {
+        return <ScenicSpotListItem key={spot.ID} spot={spot} />
+      })
 
-    const isLoading = this.state.isFetching || this.state.spots.length === 0
+      const isLoading = this.state.isFetching || this.state.spots.length === 0
 
-    return (
-      <div className="scenicSpot">
-        <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
-          {ScenicSpotList}
-          {this.state.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
-        </ul>
-      </div>
-    )
+      return (
+        <div className="scenicSpot">
+          <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
+            {ScenicSpotList}
+            {this.state.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
+          </ul>
+        </div>
+      )
+    } else {
+      return <NotFound />
+    }
   }
 }
 
