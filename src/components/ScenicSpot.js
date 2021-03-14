@@ -3,6 +3,8 @@ import { getScenicSpot } from '../api/scenicSpot'
 import ScenicSpotListItem from './ScenicSpotListItem'
 import LoadingStatus from './LoadingStatus'
 import NotFound from './NotFound'
+import { connect } from 'react-redux'
+import { saveScenicSpot, updateCityInfo } from '../store/actions/scenicSpotActions'
 
 const NUM_OF_FIRST_LOAD = 10
 const NUM_OF_SCROLL_LOAD = 10
@@ -37,21 +39,21 @@ class ScenicSpot extends Component {
     super(props)
 
     this.state = {
-      spots: [],
       isFetching: false,
       hasMoreDataToFetch: true,
     }
+    this.spotListRef = React.createRef()
   }
 
   // 滑動時檢查是否到達最底，是則載入新資料
   checkScrollPosition = async (e) => {
-    if (!this.state.hasMoreDataToFetch) return // 若已經沒有新資料可抓取，則不需檢查了
+    if (!this.props.hasMoreDataToFetch) return // 若已經沒有新資料可抓取，則不需檢查了
 
     const { offsetHeight, scrollTop, scrollHeight } = e.target
     if (offsetHeight + scrollTop >= scrollHeight && !this.state.isFetching) {
       this.setState({ isFetching: true })
       try {
-        await this.fetchMoreData()
+        await this.fetchData()
       } catch (error) {
         console.error(error)
       }
@@ -59,64 +61,61 @@ class ScenicSpot extends Component {
     }
   }
 
-  // 首次抓取資料時，先設定特定城市or全部
-  fetchFirstData = async () => {
-    if (this.props.match.params.city) {
-      this.getData = function (skip, numOfScenicSpot) {
-        return getScenicSpot(skip, numOfScenicSpot, this.props.match.params.city)
-      }
-    } else {
-      this.getData = getScenicSpot
-    }
-    const scenicSpots = await this.getData(0, NUM_OF_FIRST_LOAD)
-    this.setState({ spots: scenicSpots })
-    if (scenicSpots.length < NUM_OF_FIRST_LOAD) {
-      this.setState({ hasMoreDataToFetch: false })
-    }
-  }
+  fetchData = async () => {
+    // 先檢查是否還有資料可以抓取
+    if (this.props.hasMoreDataToFetch) {
+      // 檢查是首次抓取還是已經抓過資料，調整抓取的數量
+      const numOfScenicSpotToFetch =
+        this.props.spots.length === 0 ? NUM_OF_FIRST_LOAD : NUM_OF_SCROLL_LOAD
 
-  // 取得更多資料
-  fetchMoreData = async () => {
-    const scenicSpots = await this.getData(this.state.spots.length, NUM_OF_SCROLL_LOAD)
-    if (scenicSpots.length) {
-      this.setState({ spots: [...this.state.spots, ...scenicSpots] })
+      const scenicSpots = await getScenicSpot(
+        this.props.spots.length,
+        numOfScenicSpotToFetch,
+        this.props.city
+      )
+      this.props.saveScenicSpot(this.props.city, scenicSpots)
+
+      // 若抓到的資料比想要的資料少，代表沒有更多資料可以抓了
       if (scenicSpots.length < NUM_OF_SCROLL_LOAD) {
-        this.setState({ hasMoreDataToFetch: false })
+        this.props.updateCityInfo(this.props.city, false)
       }
-    } else {
-      this.setState({ hasMoreDataToFetch: false })
     }
   }
 
   async componentDidMount() {
-    this.fetchFirstData()
+    this.fetchData()
   }
 
   // 檢查是否換了不同的地區
   async componentDidUpdate(prevProps) {
-    const oldCity = prevProps.match.params.city
-    const newCity = this.props.match.params.city
+    const oldCity = prevProps.city
+    const newCity = this.props.city
 
     if (oldCity !== newCity) {
-      this.fetchFirstData()
-      this.setState({ hasMoreDataToFetch: true })
+      this.spotListRef.current.scrollTop = 0
+      this.fetchData()
     }
   }
 
   render() {
     // 確認城市名稱是正確的
-    if (cityList.includes(this.props.match.params.city)) {
-      const ScenicSpotList = this.state.spots.map((spot) => {
+    if (cityList.includes(this.props.city)) {
+      const ScenicSpotList = this.props.spots.map((spot) => {
         return <ScenicSpotListItem key={spot.ID} spot={spot} />
       })
+      console.log('重新render: ', this.props.city)
 
-      const isLoading = this.state.isFetching || this.state.spots.length === 0
+      const isLoading = this.state.isFetching || this.props.spots.length === 0
 
       return (
         <div className="scenicSpot">
-          <ul onScroll={this.checkScrollPosition} style={{ height: '90vh', overflow: 'auto' }}>
+          <ul
+            onScroll={this.checkScrollPosition}
+            ref={this.spotListRef}
+            style={{ height: '90vh', overflow: 'auto' }}
+          >
             {ScenicSpotList}
-            {this.state.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
+            {this.props.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
           </ul>
         </div>
       )
@@ -126,4 +125,24 @@ class ScenicSpot extends Component {
   }
 }
 
-export default ScenicSpot
+const mapStateToProps = (state, ownProps) => {
+  const city = ownProps.match.params.city
+  return {
+    spots: state.spots[city],
+    hasMoreDataToFetch: state.hasMoreDataToFetch[city],
+    city,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveScenicSpot: (city, newData) => {
+      dispatch(saveScenicSpot(city, newData))
+    },
+    updateCityInfo: (city, hasMoreDataToFetch) => {
+      dispatch(updateCityInfo(city, hasMoreDataToFetch))
+    },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScenicSpot)
