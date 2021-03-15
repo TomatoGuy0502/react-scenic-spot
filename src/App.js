@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 function App() {
   return (
     <div className="app">
+      <Link to="/scenicSpot">全台</Link>
       <Link to="/scenicSpot/Tainan">Tainan</Link>
       <Link to="/scenicSpot/Taipei">Taipei</Link>
       <Link to="/scenicSpot/Taoyuan">Taoyuan</Link>

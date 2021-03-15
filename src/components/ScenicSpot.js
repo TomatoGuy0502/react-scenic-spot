@@ -6,10 +6,10 @@ import NotFound from './NotFound'
 import { connect } from 'react-redux'
 import { saveScenicSpot, updateCityInfo } from '../store/actions/scenicSpotActions'
 
-const NUM_OF_FIRST_LOAD = 10
-const NUM_OF_SCROLL_LOAD = 10
+const NUM_OF_FIRST_LOAD = 30
+const NUM_OF_SCROLL_LOAD = 30
 const cityList = [
-  undefined,
+  undefined, // 全台
   'Taipei',
   'NewTaipei',
   'Taoyuan',
@@ -40,17 +40,16 @@ class ScenicSpot extends Component {
 
     this.state = {
       isFetching: false,
-      hasMoreDataToFetch: true,
     }
     this.spotListRef = React.createRef()
   }
 
-  // 滑動時檢查是否到達最底，是則載入新資料
+  // 滾動時檢查是否到達最底，是則載入新資料
   checkScrollPosition = async (e) => {
     if (!this.props.hasMoreDataToFetch) return // 若已經沒有新資料可抓取，則不需檢查了
 
     const { offsetHeight, scrollTop, scrollHeight } = e.target
-    if (offsetHeight + scrollTop >= scrollHeight && !this.state.isFetching) {
+    if (scrollTop !== 0 && offsetHeight + scrollTop === scrollHeight && !this.state.isFetching) {
       this.setState({ isFetching: true })
       try {
         await this.fetchData()
@@ -93,7 +92,9 @@ class ScenicSpot extends Component {
 
     if (oldCity !== newCity) {
       this.spotListRef.current.scrollTop = 0
-      this.fetchData()
+      if (this.props.spots.length === 0) {
+        this.fetchData()
+      }
     }
   }
 
@@ -103,7 +104,6 @@ class ScenicSpot extends Component {
       const ScenicSpotList = this.props.spots.map((spot) => {
         return <ScenicSpotListItem key={spot.ID} spot={spot} />
       })
-      console.log('重新render: ', this.props.city)
 
       const isLoading = this.state.isFetching || this.props.spots.length === 0
 
@@ -128,8 +128,8 @@ class ScenicSpot extends Component {
 const mapStateToProps = (state, ownProps) => {
   const city = ownProps.match.params.city
   return {
-    spots: state.spots[city],
-    hasMoreDataToFetch: state.hasMoreDataToFetch[city],
+    spots: state.spots[city] || state.spots.Taiwan,
+    hasMoreDataToFetch: state.hasMoreDataToFetch[city] || state.hasMoreDataToFetch.Taiwan,
     city,
   }
 }
