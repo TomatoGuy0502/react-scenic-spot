@@ -1,4 +1,4 @@
-export const saveScenicSpot = (city, newData) => {
+export const saveScenicSpot = (city = 'Taiwan', newData = []) => {
   return {
     type: 'SAVE_SCENIC_SPOT',
     city,
@@ -6,7 +6,7 @@ export const saveScenicSpot = (city, newData) => {
   }
 }
 
-export const updateCityInfo = (city, hasMoreDataToFetch) => {
+export const updateCityInfo = (city = 'Taiwan', hasMoreDataToFetch) => {
   return {
     type: 'UPDATE_CITY_INFO',
     city,

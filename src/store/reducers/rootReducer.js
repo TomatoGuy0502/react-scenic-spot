@@ -54,12 +54,13 @@ const initState = {
 
 const rootReducer = (state = initState, action) => {
   switch (action.type) {
+    // 把各個城市的景點存起來
     case 'SAVE_SCENIC_SPOT': {
-      // 若沒有特別指定城市則為全台
-      const city = action.city || 'Taiwan'
+      const { city, newData } = action
+
       const newSpots = {
         ...state.spots,
-        [city]: [...state.spots[city], ...action.newData],
+        [city]: [...state.spots[city], ...newData],
       }
       return {
         ...state,
@@ -67,15 +68,17 @@ const rootReducer = (state = initState, action) => {
       }
     }
 
+    // 更新城市是否還有更多資料可以抓取
     case 'UPDATE_CITY_INFO': {
-      const city = action.city || 'Taiwan'
-      const hasMoreDataToFetch = {
+      const { city, hasMoreDataToFetch } = action
+
+      const newHasMoreDataToFetch = {
         ...state.hasMoreDataToFetch,
-        [city]: action.hasMoreDataToFetch,
+        [city]: hasMoreDataToFetch,
       }
       return {
         ...state,
-        hasMoreDataToFetch,
+        newHasMoreDataToFetch,
       }
     }
 
