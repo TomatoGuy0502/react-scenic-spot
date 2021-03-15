@@ -1,0 +1,13 @@
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-right: 5px;
+  font-size: 14px;
+  line-height: 14px;
+  background-color: #3DD5F3;
+  border-radius: 30px;
+}

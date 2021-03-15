@@ -6,9 +6,9 @@ import Navbar from './components/layout/Navbar'
 
 function App() {
   return (
-    <div className="app">
+    <div className="app vh-100 d-flex flex-column">
       <Navbar />
-      <div className="container-fluid">
+      <div className="container d-flex flex-column overflow-auto">
         <Switch>
           <Route path="/" exact component={Welcome} />
           <Route path="/scenicSpot/:city?" component={ScenicSpot} />
