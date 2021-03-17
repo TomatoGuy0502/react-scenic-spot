@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-scenic-spot/static/css/main.e2a256fa.chunk.css",
-    "main.js": "/react-scenic-spot/static/js/main.e31d24d0.chunk.js",
-    "main.js.map": "/react-scenic-spot/static/js/main.e31d24d0.chunk.js.map",
+    "main.js": "/react-scenic-spot/static/js/main.35c9a91b.chunk.js",
+    "main.js.map": "/react-scenic-spot/static/js/main.35c9a91b.chunk.js.map",
     "runtime-main.js": "/react-scenic-spot/static/js/runtime-main.597f918d.js",
     "runtime-main.js.map": "/react-scenic-spot/static/js/runtime-main.597f918d.js.map",
     "static/js/2.bba2e83c.chunk.js": "/react-scenic-spot/static/js/2.bba2e83c.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.597f918d.js",
     "static/js/2.bba2e83c.chunk.js",
     "static/css/main.e2a256fa.chunk.css",
-    "static/js/main.e31d24d0.chunk.js"
+    "static/js/main.35c9a91b.chunk.js"
   ]
 }
