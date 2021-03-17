@@ -104,9 +104,13 @@ class ScenicSpot extends Component {
       return <Redirect to="/scenicSpot" />
     }
 
-    const ScenicSpotList = this.props.spots.map((spot) => {
-      return <ScenicSpotListItem key={spot.ID} spot={spot} />
-    })
+    const ScenicSpotList = this.props.spots
+      .filter((spot) => {
+        return spot.Name.match(this.props.searchTerm)
+      })
+      .map((spot) => {
+        return <ScenicSpotListItem key={spot.ID} spot={spot} />
+      })
 
     const isLoading = this.state.isFetching || this.props.spots.length === 0
 
@@ -133,6 +137,7 @@ const mapStateToProps = (state, ownProps) => {
     spots: state.spots[city] || state.spots['Taiwan'],
     hasMoreDataToFetch,
     city,
+    searchTerm: ownProps.searchTerm,
   }
 }
 

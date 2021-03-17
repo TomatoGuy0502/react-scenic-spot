@@ -28,7 +28,7 @@ const cities = [
   { value: 'LienchiangCounty', name: '連江縣 LienchiangCounty' },
 ]
 
-class Navbar extends Component {
+class CitiesSelect extends Component {
   state = {
     selectedCity: '',
   }
@@ -39,12 +39,6 @@ class Navbar extends Component {
     this.props.history.push(`/scenicSpot/${e.target.value}`)
   }
 
-  // 選擇所有城市
-  selectAllCity = (e) => {
-    this.setState({ selectedCity: '' })
-    this.props.history.push('/scenicSpot')
-  }
-
   // 首次進入時，依照url更新選項
   componentDidMount() {
     const match = matchPath(window.location.pathname, {
@@ -52,8 +46,6 @@ class Navbar extends Component {
     })
     if (match) {
       this.setState({ selectedCity: match.params.city })
-    } else {
-      this.setState({ selectedCity: 'default' })
     }
   }
 
@@ -71,27 +63,16 @@ class Navbar extends Component {
     })
 
     return (
-      <nav className="navbar navbar-light bg-light">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col">
-              <select
-                className="form-select"
-                id="citySelect"
-                onChange={this.handleSelectCity}
-                value={this.state.selectedCity}
-              >
-                {cityOptions}
-              </select>
-            </div>
-            <div className="col">
-              <input type="text" className="form-control" placeholder="篩選景點名稱" />
-            </div>
-          </div>
-        </div>
-      </nav>
+      <select
+        className="form-select"
+        id="citySelect"
+        onChange={this.handleSelectCity}
+        value={this.state.selectedCity}
+      >
+        {cityOptions}
+      </select>
     )
   }
 }
 
-export default withRouter(Navbar)
+export default withRouter(CitiesSelect)

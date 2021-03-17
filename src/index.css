@@ -8,6 +8,15 @@
   margin-right: 5px;
   font-size: 14px;
   line-height: 14px;
-  background-color: #3DD5F3;
+  background-color: #3dd5f3;
   border-radius: 30px;
+}
+
+.input-clear {
+  position: absolute;
+  width: 20px;
+  right: 63px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
 }
