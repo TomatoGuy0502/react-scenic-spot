@@ -110,7 +110,7 @@ class ScenicSpot extends Component {
     const isLoading = this.state.isFetching || this.props.spots.length === 0
 
     return (
-      <div className="scenicSpot overflow-auto">
+      <div className="scenicSpot container overflow-auto">
         <ul
           className="list-group overflow-auto h-100 py-3"
           onScroll={this.checkScrollPosition}

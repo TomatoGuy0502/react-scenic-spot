@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="app vh-100 d-flex flex-column">
       <Navbar />
-      <div className="container d-flex flex-column overflow-auto">
+      <div className="d-flex flex-column overflow-auto h-100">
         <Switch>
           <Route path="/" exact component={Welcome} />
           <Route path="/scenicSpot/:city?" component={ScenicSpot} />
