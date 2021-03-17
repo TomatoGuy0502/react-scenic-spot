@@ -48,12 +48,12 @@ class ScenicSpot extends Component {
 
   // 滾動時檢查是否到達最底，是則載入新資料
   checkScrollPosition = async (e) => {
-    if (!this.props.hasMoreDataToFetch) return // 若已經沒有新資料可抓取，則不需檢查了
+    // 若 已經沒有新資料可抓取 或 正在搜尋，則不需檢查了
+    if (!this.props.hasMoreDataToFetch || this.props.searchTerm) return
 
     const { offsetHeight, scrollTop, scrollHeight } = e.target
     if (scrollTop !== 0 && offsetHeight + scrollTop === scrollHeight && !this.state.isFetching) {
-      this.setState({ loadingError: null })
-      this.setState({ isFetching: true })
+      this.setState({ isFetching: true, loadingError: null })
       try {
         await this.fetchData()
       } catch (error) {
@@ -94,6 +94,7 @@ class ScenicSpot extends Component {
 
     if (oldCity !== newCity) {
       this.spotListRef.current.scrollTop = 0
+      // 有資料就先不要再抓了，滑到底再來抓
       if (this.props.spots.length === 0) {
         this.fetchData()
       }
@@ -115,7 +116,9 @@ class ScenicSpot extends Component {
       })
 
     const isLoading = this.state.isFetching || this.props.spots.length === 0
-
+    // 當有更多資料要抓取，且沒有在搜尋時才顯示loading status
+    const showLoadingStatus = this.props.hasMoreDataToFetch && !this.props.searchTerm
+    console.log('重新渲染')
     return (
       <div className="scenicSpot container overflow-auto">
         <ul
@@ -124,7 +127,7 @@ class ScenicSpot extends Component {
           ref={this.spotListRef}
         >
           {ScenicSpotList}
-          {this.props.hasMoreDataToFetch && (
+          {showLoadingStatus && (
             <LoadingStatus isLoading={isLoading} loadingError={this.state.loadingError} />
           )}
         </ul>

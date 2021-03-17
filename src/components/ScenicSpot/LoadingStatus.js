@@ -1,7 +1,6 @@
 import React from 'react'
 
 function LoadingStatus({ isLoading, loadingError }) {
-  console.log({ loadingError })
   let loadingStatus
   if (loadingError) {
     loadingStatus = loadingError
