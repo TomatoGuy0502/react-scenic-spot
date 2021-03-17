@@ -5,6 +5,7 @@ import LoadingStatus from './LoadingStatus'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { saveScenicSpot, updateCityInfo } from '../store/actions/scenicSpotActions'
+import { debounce } from '../helpers/function'
 
 const NUM_OF_FIRST_LOAD = 30
 const NUM_OF_SCROLL_LOAD = 30
@@ -113,7 +114,7 @@ class ScenicSpot extends Component {
       <div className="scenicSpot overflow-auto">
         <ul
           className="list-group overflow-auto h-100 py-3"
-          onScroll={this.checkScrollPosition}
+          onScroll={debounce(this.checkScrollPosition)}
           ref={this.spotListRef}
         >
           {ScenicSpotList}
