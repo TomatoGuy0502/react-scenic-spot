@@ -48,7 +48,7 @@ class Navbar extends Component {
   // 首次進入時，依照url更新選項
   componentDidMount() {
     const match = matchPath(window.location.pathname, {
-      path: '/scenicSpot/:city?',
+      path: `${process.env.PUBLIC_URL}/scenicSpot/:city?`,
     })
     if (match) {
       this.setState({ selectedCity: match.params.city })
