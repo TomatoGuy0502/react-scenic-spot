@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { getScenicSpot } from '../api/scenicSpot'
-import ScenicSpotListItem from './ScenicSpotListItem'
-import LoadingStatus from './LoadingStatus'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { saveScenicSpot, updateCityInfo } from '../store/actions/scenicSpotActions'
-import { debounce } from '../helpers/function'
+import { getScenicSpot } from '../../api/scenicSpot'
+import ScenicSpotListItem from './ScenicSpotListItem'
+import LoadingStatus from './LoadingStatus'
+import { saveScenicSpot, updateCityInfo } from '../../store/actions/scenicSpotActions'
+import { debounce } from '../../helpers/function'
 
 const NUM_OF_FIRST_LOAD = 30
 const NUM_OF_SCROLL_LOAD = 30
@@ -41,6 +41,7 @@ class ScenicSpot extends Component {
 
     this.state = {
       isFetching: false,
+      loadingError: null,
     }
     this.spotListRef = React.createRef()
   }
@@ -51,11 +52,12 @@ class ScenicSpot extends Component {
 
     const { offsetHeight, scrollTop, scrollHeight } = e.target
     if (scrollTop !== 0 && offsetHeight + scrollTop === scrollHeight && !this.state.isFetching) {
+      this.setState({ loadingError: null })
       this.setState({ isFetching: true })
       try {
         await this.fetchData()
       } catch (error) {
-        console.error(error)
+        this.setState({ loadingError: '出現錯誤，請重新嘗試' })
       }
       this.setState({ isFetching: false })
     }
@@ -122,7 +124,9 @@ class ScenicSpot extends Component {
           ref={this.spotListRef}
         >
           {ScenicSpotList}
-          {this.props.hasMoreDataToFetch && <LoadingStatus isLoading={isLoading} />}
+          {this.props.hasMoreDataToFetch && (
+            <LoadingStatus isLoading={isLoading} loadingError={this.state.loadingError} />
+          )}
         </ul>
       </div>
     )

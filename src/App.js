@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import ScenicSpot from './components/ScenicSpot'
+import ScenicSpot from './components/ScenicSpot/ScenicSpot'
 import NotFound from './components/NotFound'
 import Welcome from './components/Welcome'
 import Navbar from './components/layout/Navbar/Navbar'
