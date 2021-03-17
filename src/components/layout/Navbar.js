@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter, matchPath } from 'react-router-dom'
 
 const cities = [
+  { value: 'default', name: '請選擇範圍' },
   { value: '', name: '全台景點 Taiwan' },
   { value: 'Taipei', name: '臺北市 Taipei' },
   { value: 'NewTaipei', name: '新北市 NewTaipei' },
@@ -47,17 +48,23 @@ class Navbar extends Component {
   // 首次進入時，依照url更新選項
   componentDidMount() {
     const match = matchPath(window.location.pathname, {
-      path: '/scenicSpot/:city?',
+      path: `${process.env.PUBLIC_URL}/scenicSpot/:city?`,
     })
     if (match) {
       this.setState({ selectedCity: match.params.city })
+    } else {
+      this.setState({ selectedCity: 'default' })
     }
   }
 
   render() {
     const cityOptions = cities.map((city) => {
       return (
-        <option value={city.value} key={city.value}>
+        <option
+          value={city.value}
+          key={city.value}
+          disabled={city.value === 'default' ? true : null}
+        >
           {city.name}
         </option>
       )
@@ -67,9 +74,6 @@ class Navbar extends Component {
       <nav className="navbar navbar-light bg-light">
         <div className="container-fluid">
           <div className="row">
-            <label className="col-auto col-form-label" htmlFor="citySelect">
-              請選擇景點範圍
-            </label>
             <div className="col">
               <select
                 className="form-select"
