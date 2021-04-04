@@ -118,7 +118,6 @@ class ScenicSpot extends Component {
     const isLoading = this.state.isFetching || this.props.spots.length === 0
     // 當有更多資料要抓取，且沒有在搜尋時才顯示loading status
     const showLoadingStatus = this.props.hasMoreDataToFetch && !this.props.searchTerm
-    console.log('重新渲染')
     return (
       <div className="scenicSpot container overflow-auto">
         <ul

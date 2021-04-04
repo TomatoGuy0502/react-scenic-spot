@@ -11,7 +11,16 @@ function ScenicSpotListItem({ spot }) {
       </div>
       <p className="text-dark my-3">{spot.Description || spot.DescriptionDetail}</p>
       <div>
-        <p className="m-0 text-muted">地址：{spot.Address}</p>
+        <p className="m-0 text-muted">
+          地址：
+          <a
+            href={`https://www.google.com.tw/maps/search/${spot.Address}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {spot.Address}
+          </a>
+        </p>
         <p className="m-0 text-muted">電話：{spot.Phone}</p>
       </div>
     </li>
