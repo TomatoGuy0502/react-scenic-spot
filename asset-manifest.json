@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/react-scenic-spot/static/css/main.c5e2309f.chunk.css",
-    "main.js": "/react-scenic-spot/static/js/main.76ad4d54.chunk.js",
-    "main.js.map": "/react-scenic-spot/static/js/main.76ad4d54.chunk.js.map",
+    "main.css": "/react-scenic-spot/static/css/main.97d8d253.chunk.css",
+    "main.js": "/react-scenic-spot/static/js/main.9a733c02.chunk.js",
+    "main.js.map": "/react-scenic-spot/static/js/main.9a733c02.chunk.js.map",
     "runtime-main.js": "/react-scenic-spot/static/js/runtime-main.597f918d.js",
     "runtime-main.js.map": "/react-scenic-spot/static/js/runtime-main.597f918d.js.map",
-    "static/js/2.2084d782.chunk.js": "/react-scenic-spot/static/js/2.2084d782.chunk.js",
-    "static/js/2.2084d782.chunk.js.map": "/react-scenic-spot/static/js/2.2084d782.chunk.js.map",
+    "static/js/2.d28cacd8.chunk.js": "/react-scenic-spot/static/js/2.d28cacd8.chunk.js",
+    "static/js/2.d28cacd8.chunk.js.map": "/react-scenic-spot/static/js/2.d28cacd8.chunk.js.map",
     "index.html": "/react-scenic-spot/index.html",
-    "static/css/main.c5e2309f.chunk.css.map": "/react-scenic-spot/static/css/main.c5e2309f.chunk.css.map",
-    "static/js/2.2084d782.chunk.js.LICENSE.txt": "/react-scenic-spot/static/js/2.2084d782.chunk.js.LICENSE.txt"
+    "static/css/main.97d8d253.chunk.css.map": "/react-scenic-spot/static/css/main.97d8d253.chunk.css.map",
+    "static/js/2.d28cacd8.chunk.js.LICENSE.txt": "/react-scenic-spot/static/js/2.d28cacd8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.597f918d.js",
-    "static/js/2.2084d782.chunk.js",
-    "static/css/main.c5e2309f.chunk.css",
-    "static/js/main.76ad4d54.chunk.js"
+    "static/js/2.d28cacd8.chunk.js",
+    "static/css/main.97d8d253.chunk.css",
+    "static/js/main.9a733c02.chunk.js"
   ]
 }
