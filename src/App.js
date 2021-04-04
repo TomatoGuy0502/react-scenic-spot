@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import ScenicSpot from './components/ScenicSpot/ScenicSpot'
 import NotFound from './components/NotFound'
 import Welcome from './components/Welcome'
-import Navbar from './components/layout/Navbar/Navbar'
+import Navbar from './components/Navbar/Navbar'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
